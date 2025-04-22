@@ -83,5 +83,5 @@ client.on(Events.MessageCreate, (message) => {
   }
 });
 
-client.login(token);
+client.login(token);;
 

@@ -15,4 +15,4 @@ module.exports = (client) => {
       .catch((error) => console.error('Error reacting to message:', error))
     }
   });
-};
+};;
