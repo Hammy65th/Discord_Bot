@@ -3,6 +3,7 @@ const token = process.env.DISCORD_TOKEN
 require('dotenv').config();
 const imageResponder = require('./imageResponder');
 const reactionHandler = require('./heroHandler')
+const { createWorkshopEmbed } = require('./workshop/steamWorkshop');
 
 const client = new Client({
   intents: [
@@ -31,8 +32,17 @@ client.once(Events.ClientReady, async c => {
     .setName("ping")
     .setDescription("Replies with Pong!");
 
+  const workshop = new SlashCommandBuilder()
+    .setName('workshop')
+    .setDescription('Get info on a Steam Workshop item')
+    .addStringOption(option => 
+      option.setName('id')
+        .setDescription('Steam Workshop item ID')
+        .setRequired(true)
+    );
+
   try {
-    await c.application.commands.set([king, baldwin, jerusalem, ping]);
+    await c.application.commands.set([king, baldwin, jerusalem, ping, workshop]);
     console.log("Commands registered!");
   } catch (error) {
     console.error("Error registering commands:", error);
@@ -43,7 +53,7 @@ client.once(Events.ClientReady, async c => {
   reactionHandler(client);
 });
 
-client.on(Events.InteractionCreate, interaction => {
+client.on(Events.InteractionCreate, async interaction => {
   if(interaction.commandName === "ping"){
      interaction.reply("Pong!")
   }
@@ -56,7 +66,17 @@ client.on(Events.InteractionCreate, interaction => {
 if(interaction.commandName === "king"){
   interaction.reply("You see no weakness in me, do you? You see a mask. You see a king. You see what I allow you to see. But underneath… I am rotting. And still, I must rule — wisely. Justly. Because the people of Jerusalem deserve more than a dying man.")
 }
-
+if (interaction.commandName === "workshop") {
+  const id = interaction.options.getString("id");
+  await interaction.deferReply();
+  try {
+    const embed = await createWorkshopEmbed(id);
+    await interaction.editReply({embeds: [embed]});
+  } catch (err) {
+    console.error(err);
+    await interaction.editReply("Could not fetch the workship item. Please check the ID.")
+  }
+}
  
 });
 
