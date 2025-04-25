@@ -4,6 +4,9 @@ require('dotenv').config();
 const imageResponder = require('./imageResponder');
 const reactionHandler = require('./heroHandler')
 const { createWorkshopEmbed } = require('./workshop/steamWorkshop');
+const rollCommand = require('./roll');
+
+
 
 const client = new Client({
   intents: [
@@ -12,6 +15,9 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
+
+client.commands = new Map();
+client.commands.set(rollCommand.data.name, rollCommand.execute);
 
 client.once(Events.ClientReady, async c => {
   console.log(`Logged in as ${c.user.username}`);
@@ -42,7 +48,7 @@ client.once(Events.ClientReady, async c => {
     );
 
   try {
-    await c.application.commands.set([king, baldwin, jerusalem, ping, workshop]);
+    await c.application.commands.set([king, baldwin, jerusalem, ping, workshop,rollCommand.data]);
     console.log("Commands registered!");
   } catch (error) {
     console.error("Error registering commands:", error);
@@ -54,6 +60,11 @@ client.once(Events.ClientReady, async c => {
 });
 
 client.on(Events.InteractionCreate, async interaction => {
+  
+  const handler = client.commands.get(interaction.commandName);
+  if (handler) return handler(interaction);
+
+  
   if(interaction.commandName === "ping"){
      interaction.reply("Pong!")
   }
