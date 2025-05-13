@@ -96,11 +96,20 @@ client.on(Events.MessageCreate, (message) => {
 
   if (
     message.guild &&
-    message.guild.id === '1330350140606779545' && 
-    message.content.toLowerCase() === "gm") {
-    message.reply("Good Miku")
+    message.guild.id === '1330350140606779545'
+  ) {
+    const lowerContent = message.content.toLowerCase();
+
+    // Define valid trigger phrases
+    const gmTriggers = ['gm', 'good morning', 'morning', 'g m', 'Gm', 'good miku', 'Good Miku', 'salutetons'];
+
+    // Check if message matches any trigger exactly
+    if (gmTriggers.includes(lowerContent)) {
+      message.reply("Good Miku");
+    }
   }
-})
+});
+
 
 client.on(Events.MessageCreate, (message) => {
 
