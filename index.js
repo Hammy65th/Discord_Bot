@@ -1,4 +1,4 @@
-const { Client, Events, SlashCommandBuilder, GatewayIntentBits } = require('discord.js');
+const { Client, Events, SlashCommandBuilder, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const token = process.env.DISCORD_TOKEN
 require('dotenv').config();
 const imageResponder = require('./imageResponder');
@@ -111,17 +111,34 @@ client.on(Events.MessageCreate, (message) => {
 });
 
 
-client.on(Events.MessageCreate, (message) => {
+// client.on(Events.MessageCreate, (message) => {
 
+//   if (message.author.bot) return;
+
+//   if (message.mentions.has(client.user)) {
+//     message.reply({
+//       content: `${message.author} :)`,
+//       files: ['https://tenor.com/view/cat-stupid-slobber-the-bluetooth-device-is-ready-to-pair-gif-17323072743601828847']
+//     });
+//   }
+// });
+
+
+
+client.on(Events.MessageCreate, (message) => {
   if (message.author.bot) return;
 
   if (message.mentions.has(client.user)) {
+    const embed = new EmbedBuilder()
+      .setImage('https://tenor.com/view/cat-stupid-slobber-the-bluetooth-device-is-ready-to-pair-gif-17323072743601828847') // Replace with actual direct gif URL
+      .setColor(0x00AE86);
+
     message.reply({
-      content: `${message.author} :)`,
-      files: ['https://cdn.discordapp.com/attachments/1359147462941474888/1364207553159888946/efb55c899090fca66e7d810b5d1f47b6.png?ex=6808d4ca&is=6807834a&hm=c1244dcd897a360e7e280eedda7a152a1fdc2c105bbf02a4a34c563f24d8ccc7&']
+      content: `${message.author}`,
+      embeds: [embed]
     });
   }
 });
 
-client.login(token);;
+client.login(token);
 

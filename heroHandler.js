@@ -6,7 +6,6 @@
 //236962814239965184 | Aug
 //378256488751431680 | Miiller
 //662400113708236800 | Jack
-//254381504463896577 | Lewis
 
 module.exports = (client) => {
   const targetUserReactions ={ 
